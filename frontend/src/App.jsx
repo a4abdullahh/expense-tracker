@@ -1,5 +1,4 @@
 import { Route, Routes } from 'react-router-dom';
-
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import SignupPage from './pages/SignupPage';
@@ -10,7 +9,7 @@ import BackgroundBeams from './components/ui/BackgroundBeams';
 
 function App() {
   return (
-    <div className='h-screen w-full rounded-md bg-neutral-950 relative flex flex-col items-center justify-center antialiased'>
+    <div className='h-screen w-full bg-neutral-950 relative flex flex-col items-center antialiased'>
       <BackgroundBeams className='z-0' />
       <div className='relative z-10'>
         <Header />

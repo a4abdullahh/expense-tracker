@@ -6,3 +6,17 @@ export const signupSchema = z.object({
   password: z.string().min(8, 'Password must be at least 8 characters long'),
   gender: z.string().min(1, 'Gender is required'),
 });
+
+export const loginSchema = z.object({
+  username: z.string().min(1, 'Username is required'),
+  password: z.string().min(8, 'Password must be at least 8 characters long'),
+});
+
+export const transactionSchema = z.object({
+  description: z.string().min(1, 'Transaction description is required'),
+  paymentType: z.enum(['card', 'cash', 'bank'], 'Invalid payment type'),
+  category: z.enum(['saving', 'expense', 'investment'], 'Invalid category'),
+  amount: z.number().min(0.01, 'Amount must be greater than 0').nullable(),
+  location: z.string().min(1, 'Location is required'),
+  date: z.string().refine((val) => !isNaN(Date.parse(val)), 'Invalid date'),
+});
