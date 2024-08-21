@@ -9,9 +9,9 @@ import BackgroundBeams from './components/ui/BackgroundBeams';
 
 function App() {
   return (
-    <div className='h-screen w-full bg-neutral-950 relative flex flex-col items-center antialiased'>
-      <BackgroundBeams className='z-0' />
-      <div className='relative z-10'>
+    <div className='scrollable-container min-h-screen w-full bg-neutral-950 relative flex flex-col items-center antialiased'>
+      <BackgroundBeams className='absolute inset-0 z-0' />
+      <div className='relative z-10 w-full'>
         <Header />
         <Routes>
           <Route path='/' element={<HomePage />} />

@@ -31,13 +31,13 @@ const TransactionForm = () => {
     console.log(data);
   };
 
-  if(false) {
-    return <TransactionFormSkeleton />
+  if (false) {
+    return <TransactionFormSkeleton />;
   }
 
   return (
     <form
-      className='w-full max-w-lg flex flex-col gap-2 px-3'
+      className='w-full max-w-lg flex flex-col gap-4 px-4 sm:px-6'
       onSubmit={handleSubmit(onSubmit)}
     >
       <LabelInputContainer className='mb-4'>
@@ -51,8 +51,8 @@ const TransactionForm = () => {
         />
       </LabelInputContainer>
 
-      <div className='flex gap-2 mb-4'>
-        <LabelInputContainer>
+      <div className='flex flex-col sm:flex-row gap-4 mb-4'>
+        <LabelInputContainer className='flex-1'>
           <Label htmlFor='paymentType'>Payment Type</Label>
           <Controller
             name='paymentType'
@@ -69,7 +69,7 @@ const TransactionForm = () => {
           />
         </LabelInputContainer>
 
-        <LabelInputContainer>
+        <LabelInputContainer className='flex-1'>
           <Label htmlFor='category'>Category</Label>
           <Controller
             name='category'
@@ -86,7 +86,7 @@ const TransactionForm = () => {
           />
         </LabelInputContainer>
 
-        <LabelInputContainer>
+        <LabelInputContainer className='flex-1'>
           <Label htmlFor='amount'>Amount ($)</Label>
           <Input
             className='[appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none'
@@ -99,8 +99,8 @@ const TransactionForm = () => {
         </LabelInputContainer>
       </div>
 
-      <div className='flex gap-2 mb-8'>
-        <LabelInputContainer>
+      <div className='flex flex-col sm:flex-row gap-4 mb-8'>
+        <LabelInputContainer className='flex-1'>
           <Label htmlFor='location'>Location</Label>
           <Input
             id='location'
@@ -111,7 +111,7 @@ const TransactionForm = () => {
           />
         </LabelInputContainer>
 
-        <LabelInputContainer>
+        <LabelInputContainer className='flex-1'>
           <Label htmlFor='date'>Date</Label>
           <Input
             className='block'
