@@ -56,10 +56,10 @@ const userResolver = {
       }
     },
 
-    login: async (_, { input }, { req, login }) => {
+    login: async (_, { input }, { authenticate, login }) => {
       try {
         const { username, password } = input;
-        const user = await passport.authenticate('graphql-local', {
+        const { user } = await authenticate('graphql-local', {
           username,
           password,
         });

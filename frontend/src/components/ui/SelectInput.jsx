@@ -56,16 +56,18 @@ const SelectInput = React.forwardRef(
                 <FiChevronDown className='h-4 w-4' />
               </Select.Icon>
             </Select.Trigger>
-            <Select.Content className='border border-zinc-600 bg-zinc-800 rounded-md shadow-lg'>
-              {options.map(({ value, label }) => (
-                <Select.Item
-                  key={value}
-                  value={value}
-                  className='px-4 py-2 hover:bg-neutral-700 focus:bg-neutral-700 cursor-pointer text-white'
-                >
-                  <Select.ItemText>{label}</Select.ItemText>
-                </Select.Item>
-              ))}
+            <Select.Content className='overflow-hidden border border-zinc-600 bg-zinc-800 rounded-md shadow-lg'>
+              <Select.Viewport>
+                {options.map(({ value, label }) => (
+                  <Select.Item
+                    key={value}
+                    value={value}
+                    className='px-4 py-2 hover:bg-neutral-700 focus:bg-neutral-700 cursor-pointer text-white'
+                  >
+                    <Select.ItemText>{label}</Select.ItemText>
+                  </Select.Item>
+                ))}
+              </Select.Viewport>
             </Select.Content>
           </Select.Root>
           {error && <p className='text-red-500 text-sm mt-1'>{error}</p>}

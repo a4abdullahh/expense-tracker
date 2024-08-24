@@ -59,7 +59,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 const HomePage = () => {
   return (
-    <div className='flex flex-col gap-6 items-center max-w-7xl mx-auto relative justify-center text-white my-10 px-4 sm:px-6 md:px-8'>
+    <div className='flex flex-col gap-6 items-center mx-auto relative justify-center text-white'>
       <div className='flex flex-col-reverse sm:flex-row w-full justify-center items-center gap-6 sm:gap-12'>
         <div className='flex-shrink-0 w-full max-w-[300px] sm:max-w-[360px] h-[300px] sm:h-[360px]'>
           <Doughnut data={chartData} options={chartOptions} />
@@ -70,9 +70,8 @@ const HomePage = () => {
         </div>
       </div>
 
-      <div className='w-full px-4 sm:px-6 md:px-10'>
-        <p className='text-3xl sm:text-4xl md:text-5xl font-bold text-center my-10 text-white'>History</p>
-        <div className='w-full grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-start mb-20'>
+      <div className='w-full px-10 max-w-7xl min-h-[40vh] my-10'>
+        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 justify-start flex-wrap'>
           <Card cardType={'saving'} />
           <Card cardType={'expense'} />
           <Card cardType={'investment'} />

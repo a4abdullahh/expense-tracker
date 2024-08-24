@@ -1,12 +1,19 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@apollo/client';
+import { toast } from 'sonner';
 import Input from '../ui/Input';
 import Label from '../ui/Label';
 import Button from '../ui/Button';
 import LabelInputContainer from '../ui/LabelInputContainer';
 import { loginSchema } from '../../lib/schemas';
+import { LOGIN } from '../../graphql/mutations/user.mutation';
 
 const LoginForm = () => {
+  const [login, { loading }] = useMutation(LOGIN, {
+    refetchQueries: ['GetAuthenticatedUser'],
+  });
+
   const {
     register,
     handleSubmit,
@@ -15,8 +22,17 @@ const LoginForm = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (input) => {
+    try {
+      await login({
+        variables: {
+          input,
+        },
+      });
+      toast.success('Logged in successfully');
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
   return (
@@ -43,7 +59,11 @@ const LoginForm = () => {
         />
       </LabelInputContainer>
 
-      <Button type='submit'>Log in &rarr;</Button>
+      <Button disabled={loading} type='submit'>
+        Log in &rarr;
+      </Button>
+
+      <div className='bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full' />
     </form>
   );
 };

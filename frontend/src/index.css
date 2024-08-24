@@ -4,12 +4,13 @@
 
 body,
 html {
-    overflow-x: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-
 /* For Webkit browsers (Chrome, Safari) */
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
     width: 8px;
 }
 
@@ -25,7 +26,7 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
     background: #6c6c6c;
-}
+} */
 
 /* For Firefox */
 .scrollable-container {

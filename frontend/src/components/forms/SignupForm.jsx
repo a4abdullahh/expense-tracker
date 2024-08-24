@@ -1,5 +1,7 @@
 import { useForm, Controller } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@apollo/client';
+import { toast } from 'sonner';
 import Input from '../ui/Input';
 import Label from '../ui/Label';
 import Button from '../ui/Button';
@@ -7,8 +9,13 @@ import SelectInput from '../ui/SelectInput';
 import LabelInputContainer from '../ui/LabelInputContainer';
 import { signupSchema } from '../../lib/schemas';
 import { genderOptions } from '../../lib/constants';
+import { SIGN_UP } from '../../graphql/mutations/user.mutation';
 
 const SignupForm = () => {
+  const [signUp, { loading }] = useMutation(SIGN_UP, {
+    refetchQueries: ['GetAuthenticatedUser'],
+  });
+
   const {
     register,
     handleSubmit,
@@ -24,8 +31,17 @@ const SignupForm = () => {
     },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (input) => {
+    try {
+      await signUp({
+        variables: {
+          input,
+        },
+      });
+      toast.success('Signed up successfully')
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
   return (
@@ -79,7 +95,9 @@ const SignupForm = () => {
         />
       </LabelInputContainer>
 
-      <Button type='submit'>Sign up &rarr;</Button>
+      <Button disabled={loading} type='submit'>
+        Sign up &rarr;
+      </Button>
 
       <div className='bg-gradient-to-r from-transparent via-neutral-700 to-transparent my-8 h-[1px] w-full' />
     </form>
