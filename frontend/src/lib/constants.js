@@ -13,3 +13,9 @@ export const categoryOptions = [
   { value: 'expense', label: 'Expense' },
   { value: 'investment', label: 'Investment' },
 ];
+
+export const categoryColorMap = {
+  saving: 'from-green-700 to-green-400',
+  expense: 'from-pink-800 to-pink-600',
+  investment: 'from-blue-700 to-blue-400',
+};

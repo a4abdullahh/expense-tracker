@@ -2,7 +2,7 @@ import TransactionForm from '../components/forms/TransactionForm';
 
 const TransactionPage = () => {
   return (
-    <div className='max-w-4xl mx-auto flex flex-col items-center pt-10'>
+    <div className='flex flex-col items-center'>
       <TransactionForm />
     </div>
   );

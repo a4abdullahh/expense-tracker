@@ -1,5 +1,9 @@
+import { useEffect, useState } from 'react';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation, useLazyQuery } from '@apollo/client';
+import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 import Label from '../ui/Label';
 import Input from '../ui/Input';
 import Button from '../ui/Button';
@@ -8,30 +12,99 @@ import LabelInputContainer from '../ui/LabelInputContainer';
 import TransactionFormSkeleton from '../skeletons/TransactionFormSkeleton';
 import { categoryOptions, paymentOptions } from '../../lib/constants';
 import { transactionSchema } from '../../lib/schemas';
+import {
+  CREATE_TRANSACTION,
+  UPDATE_TRANSACTION,
+} from '../../graphql/mutations/transaction.mutation';
+import { GET_TRANSACTION } from '../../graphql/queries/transaction.query';
 
-const TransactionForm = () => {
+const TransactionForm = ({ transactionId, defaultValues }) => {
+  const { id } = useParams();
+  const isEditMode = transactionId || id;
+  const [transactionData, setTransactionData] = useState(null);
+
+  const [createTransaction, { loading: createLoading }] = useMutation(
+    CREATE_TRANSACTION,
+    {
+      refetchQueries: ['GetTransactions', 'GetCategoryStatistics'],
+    }
+  );
+  const [updateTransaction, { loading: updateLoading }] =
+    useMutation(UPDATE_TRANSACTION);
+  const [fetchTransaction, { loading: fetchLoading }] = useLazyQuery(
+    GET_TRANSACTION,
+    {
+      onCompleted: (data) => {
+        setTransactionData(data.transaction);
+      },
+    }
+  );
+
   const {
     register,
     handleSubmit,
     control,
+    setValue,
+    reset,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(transactionSchema),
-    defaultValues: {
-      description: '',
-      paymentType: 'card',
-      category: 'saving',
-      amount: '',
-      location: '',
-      date: '',
-    },
+    defaultValues: transactionData ||
+      defaultValues || {
+        description: '',
+        paymentType: 'card',
+        category: 'saving',
+        amount: '',
+        location: '',
+        date: '',
+      },
   });
 
-  const onSubmit = (data) => {
-    console.log(data);
+  useEffect(() => {
+    if (isEditMode) {
+      fetchTransaction({ variables: { transactionId: transactionId || id } });
+    }
+  }, [transactionId, id, fetchTransaction, isEditMode]);
+
+  useEffect(() => {
+    if (transactionData) {
+      Object.keys(transactionData).forEach((key) => {
+        let value = transactionData[key];
+
+        if (key === 'date' && value) {
+          const dateObj = new Date(parseInt(value, 10));
+          value = dateObj.toISOString().split('T')[0];
+        }
+
+        setValue(key, value);
+      });
+    }
+  }, [transactionData, setValue]);
+
+  const onSubmit = async (input) => {
+    try {
+      if (isEditMode) {
+        await updateTransaction({
+          variables: {
+            input: { transactionId: transactionId || id, ...input },
+          },
+        });
+        toast.success('Transaction updated successfully');
+      } else {
+        await createTransaction({
+          variables: {
+            input,
+          },
+        });
+        reset();
+        toast.success('Transaction created successfully');
+      }
+    } catch (err) {
+      toast.error(err.message);
+    }
   };
 
-  if (false) {
+  if (fetchLoading) {
     return <TransactionFormSkeleton />;
   }
 
@@ -124,7 +197,9 @@ const TransactionForm = () => {
         </LabelInputContainer>
       </div>
 
-      <Button type='submit'>Update Transaction</Button>
+      <Button disabled={createLoading || updateLoading} type='submit'>
+        {isEditMode ? 'Update Transaction' : 'Create Transaction'}
+      </Button>
     </form>
   );
 };

@@ -1,17 +1,20 @@
 import { Link } from 'react-router-dom';
 import { FaSignOutAlt } from 'react-icons/fa';
-import { useMutation } from '@apollo/client';
+import { useMutation, useQuery } from '@apollo/client';
 import { toast } from 'sonner';
 import { LOGOUT } from '../../graphql/mutations/user.mutation';
+import { GET_AUTHENTICATED_USER } from '../../graphql/queries/user.query';
 
 const Header = () => {
-  const [logout, { loading }] = useMutation(LOGOUT, {
+  const { data } = useQuery(GET_AUTHENTICATED_USER);
+  const [logout, { loading, client }] = useMutation(LOGOUT, {
     refetchQueries: ['GetAuthenticatedUser'],
   });
 
   const handleLogout = async () => {
     try {
       await logout();
+      client.resetStore();
       toast.success('Successfully logged out');
     } catch (err) {
       toast.error(err.message);
@@ -33,11 +36,13 @@ const Header = () => {
           </div>
         </div>
         <div className='flex items-center space-x-4'>
-          <img
-            src='/path/to/profile-pic.jpg'
-            alt='Profile'
-            className='w-10 h-10 md:w-12 md:h-12 rounded-full border-2 border-neutral-200'
-          />
+          {data?.authUser?.profilePicture && (
+            <img
+              src={data.authUser.profilePicture}
+              alt='Profile'
+              className='w-8 md:w-10 rounded-full border-2 border-neutral-200'
+            />
+          )}
           <FaSignOutAlt
             onClick={handleLogout}
             className={`text-2xl cursor-pointer hover:text-blue-500 transition-colors duration-300 ${

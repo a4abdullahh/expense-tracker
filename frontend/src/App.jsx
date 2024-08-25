@@ -11,7 +11,7 @@ import AuthLayout from './components/layouts/AuthLayout';
 
 function App() {
   return (
-    <main className='flex flex-col h-full bg-neutral-900'>
+    <main className='h-full'>
       <BackgroundBeams className='absolute inset-0 z-0' />
       <div className='relative z-10'>
         <Routes>
